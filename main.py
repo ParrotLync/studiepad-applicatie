@@ -1,6 +1,7 @@
 # Casusgroep 12 - Alain Lardinois & Peter Roijen
 import sqlite3
 import os
+import time
 
 
 class SqliteDBConnection:
@@ -33,6 +34,50 @@ class SPA(SqliteDBConnection):
     def __init__(self, type_user, user_id):
         self.spa_db_path = os.path.join(os.path.dirname(__file__), 'spa_data.db')
         super().__init__(self.spa_db_path)
+        self.choice_menu = {1: {0: self.close_program},
+                            2: {0: self.close_program},
+                            3: {0: self.close_program}}
+        self.choice_app = []
+        self.user_type = type_user
+        self.userID = user_id
+        self.done_with_app = False
+
+    def display_menu(self):
+        if self.user_type is 1:
+            print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
+                  "1. "
+                  "0. Sluit de applicatie af")
+            self.choice_app = [0]
+        if self.user_type is 2:
+            print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
+                  "1. "
+                  "0. Sluit de applicatie af")
+            self.choice_app = [0]
+        if self.user_type is 3:
+            print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
+                  "1. "
+                  "0. Sluit de applicatie af")
+            self.choice_app = [0]
+
+    def app_choice(self):
+        valid_menu_choice = False
+        while not valid_menu_choice:
+            try:
+                self.display_menu()
+                choice_app = int(input("\nWat is uw keuze?: "))
+                if choice_app in self.choice_app:
+                    action = self.choice_menu[self.user_type].get(choice_app)
+                    action()
+                    valid_menu_choice = True
+                else:
+                    print("\n{} is geen geldige keuze, probeer het nog eens.".format(choice_app))
+            except ValueError:
+                print("\nU heeft een ongeldig karakter ingevuld, probeer het nog eens.")
+
+    def close_program(self):
+        print("\nWij wensen u een fijne dag!")
+        time.sleep(2)
+        self.done_with_app = True
 
 
 def login(choice_user, username, password):
@@ -79,10 +124,10 @@ def main():
         else:
             connect_login_db.logged_in = is_logged_in
 
-    # use_apps = SPA(credentials[0], check_if_logged_in[1][0][0])
-    #
-    # while not use_apps.done_with_app:
-    #     use_apps.app_choice()
+    use_apps = SPA(credentials[0], check_if_logged_in[1][0][0])
+
+    while not use_apps.done_with_app:
+        use_apps.app_choice()
 
 
 if __name__ == "__main__":
