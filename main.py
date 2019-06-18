@@ -29,7 +29,7 @@ class Login(SqliteDBConnection):
         return self.execute_query(self.find_user[choice_user], username, password)
 
 
-class Apps(SqliteDBConnection):
+class SPA(SqliteDBConnection):
     def __init__(self, type_user, user_id):
         self.spa_db_path = os.path.join(os.path.dirname(__file__), 'spa_data.db')
         super().__init__(self.spa_db_path)
@@ -79,10 +79,10 @@ def main():
         else:
             connect_login_db.logged_in = is_logged_in
 
-    use_apps = Apps(credentials[0], check_if_logged_in[1][0][0])
-
-    while not use_apps.done_with_app:
-        use_apps.app_choice()
+    # use_apps = SPA(credentials[0], check_if_logged_in[1][0][0])
+    #
+    # while not use_apps.done_with_app:
+    #     use_apps.app_choice()
 
 
 if __name__ == "__main__":
