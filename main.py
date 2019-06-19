@@ -119,10 +119,7 @@ def main():
         except TypeError:
             is_logged_in = check_if_logged_in
 
-        if is_logged_in is True:
-            login_user.logged_in = is_logged_in
-        else:
-            login_user.logged_in = is_logged_in
+        login_user.logged_in = is_logged_in
 
     use_apps = SPA(credentials[0], check_if_logged_in[1][0][0])
 
