@@ -109,9 +109,9 @@ def user_credentials():
 
 
 def main():
-    connect_login_db = Login()
+    login_user = Login()
 
-    while not connect_login_db.logged_in:
+    while not login_user.logged_in:
         credentials = user_credentials()
         check_if_logged_in = login(credentials[0], credentials[1], credentials[2])
         try:
@@ -120,9 +120,9 @@ def main():
             is_logged_in = check_if_logged_in
 
         if is_logged_in is True:
-            connect_login_db.logged_in = is_logged_in
+            login_user.logged_in = is_logged_in
         else:
-            connect_login_db.logged_in = is_logged_in
+            login_user.logged_in = is_logged_in
 
     use_apps = SPA(credentials[0], check_if_logged_in[1][0][0])
 
