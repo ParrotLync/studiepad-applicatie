@@ -21,7 +21,7 @@ class Login(SqliteDBConnection):
     def __init__(self):
         self.login_db_path = os.path.join(os.path.dirname(__file__), 'login_db.db')
         super().__init__(self.login_db_path)
-        self.find_user = "SELECT * FROM users WHERE username = ? AND password = ? AND type_user = ?"
+        self.find_user = "SELECT * FROM USERS WHERE username = ? AND password = ? AND type_user = ?"
         self.logged_in = False
 
     def search_user(self, type_user, username, password):
@@ -32,7 +32,7 @@ class SPA(SqliteDBConnection):
     def __init__(self, type_user, user_id):
         self.spa_db_path = os.path.join(os.path.dirname(__file__), 'spa_data.db')
         super().__init__(self.spa_db_path)
-        self.choice_menu = {1: {1: self.test,
+        self.choice_menu = {1: {1: self.print_available_courses,
                                 0: self.close_program},
                             2: {0: self.close_program},
                             3: {0: self.close_program}}
@@ -44,17 +44,17 @@ class SPA(SqliteDBConnection):
     def display_menu(self):
         if self.user_type is 1:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
-                  "1. test"
+                  "1. Mogelijke keuzevakken\n"
                   "0. Sluit de applicatie af")
             self.choice_app = [1, 0]
         if self.user_type is 2:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
-                  "1. niets 1"
+                  "1. niets 1\n"
                   "0. Sluit de applicatie af")
             self.choice_app = [0]
         if self.user_type is 3:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
-                  "1. niets 2"
+                  "1. niets 2\n"
                   "0. Sluit de applicatie af")
             self.choice_app = [0]
 
@@ -73,8 +73,11 @@ class SPA(SqliteDBConnection):
             except ValueError:
                 print("\nU heeft een ongeldig karakter ingevuld, probeer het nog eens.")
 
-    def test(self):
-        print("test")
+    def print_available_courses(self):
+        # TODO: Werkt niet, aanpassen
+        courses_query = "SELECT * FROM COURSES"
+        print(self.cursor.description())
+        print(self.execute_query(courses_query))
 
     def close_program(self):
         print("\nU wordt nu uitgelogd. Wij wensen u een fijne dag!")
@@ -95,7 +98,7 @@ def try_to_login(choice_user, username, password):
 def user_credentials():
     print("\nKies een van de onderstaande opties.\n"
           "1. Inloggen student\n"
-          "2. Inloggen SLB'er\n"
+          "2. Inloggen SLBer\n"
           "3. Inloggen management\n"
           "0. Applicatie afsluiten")
     while True:
