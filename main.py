@@ -25,6 +25,7 @@ class Login(SqliteDBConnection):
         self.logged_in = False
 
     def search_user(self, type_user, username, password):
+        self.logged_in = True
         return self.execute_query(self.find_user, username, password, type_user)
 
 
@@ -44,17 +45,17 @@ class SPA(SqliteDBConnection):
     def display_menu(self):
         if self.user_type is 1:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
-                  "1. "
+                  "1. test"
                   "0. Sluit de applicatie af")
             self.choice_app = [1, 0]
         if self.user_type is 2:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
-                  "1. "
+                  "1. niets 1"
                   "0. Sluit de applicatie af")
             self.choice_app = [1, 0]
         if self.user_type is 3:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
-                  "1. "
+                  "1. niets 2"
                   "0. Sluit de applicatie af")
             self.choice_app = [1, 0]
 
@@ -77,7 +78,7 @@ class SPA(SqliteDBConnection):
         print("test")
 
     def close_program(self):
-        print("\nWij wensen u een fijne dag!")
+        print("\nU wordt nu uitgelogd. Wij wensen u een fijne dag!")
         time.sleep(2)
         self.done_with_app = True
 
@@ -85,48 +86,48 @@ class SPA(SqliteDBConnection):
 def login(choice_user, username, password):
     login_user = Login()
     users = login_user.search_user(choice_user, username, password)
+    print(users)
     if len(users) > 0:
         print("\nWelkom {} {}.".format(users[0][2], users[0][3]))
-        return True, users
+        return users
     else:
         print("\nDe opgegeven credentials zijn niet bekend in het systeem, probeer het nog eens.")
-        return False
 
 
 def user_credentials():
-    print("\nKies een van de onderstaande gebruikers waar u op wilt inloggen.\n"
-          "1. Student\n"
-          "2. SLB'er\n"
-          "3. Management")
-    valid_input = False
-    while not valid_input:
+    print("\nKies een van de onderstaande opties.\n"
+          "1. Inloggen student\n"
+          "2. Inloggen SLB'er\n"
+          "3. Inloggen management\n"
+          "0. Applicatie afsluiten")
+    while True:
         try:
             choice_user = int(input("\nWat is uw keuze?: "))
-            username = input("\nWat is uw gebruikersnaam?: ")
-            password = input("Wat is uw wachtwoord?: ")
-            valid_input = True
-            return choice_user, username, password
+            if choice_user is 0:
+                return choice_user
+            else:
+                username = input("\nWat is uw gebruikersnaam?: ")
+                password = input("Wat is uw wachtwoord?: ")
+                return choice_user, username, password
         except ValueError:
             print("De keuze dat u heeft gemaakt is niet mogelijk, probeer het nog eens.")
 
 
 def main():
+    # TODO: Mogelijkheid om de applicatie af te sluiten
     login_user = Login()
-    
+
     while not login_user.logged_in:
         credentials = user_credentials()
-        check_if_logged_in = login(credentials[0], credentials[1], credentials[2])
-        try:
-            is_logged_in = check_if_logged_in[0]
-        except TypeError:
-            is_logged_in = check_if_logged_in
+        if credentials == 0:
+            login_user.logged_in = True
+        else:
+            check_if_logged_in = login(credentials[0], credentials[1], credentials[2])
 
-        login_user.logged_in = is_logged_in
+            use_apps = SPA(credentials[0], check_if_logged_in)
 
-    use_apps = SPA(credentials[0], check_if_logged_in[1][0][0])
-
-    while not use_apps.done_with_app:
-        use_apps.app_choice()
+            while not use_apps.done_with_app:
+                use_apps.app_choice()
 
 
 if __name__ == "__main__":
