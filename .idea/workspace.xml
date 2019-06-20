@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1ea462e1-d366-47e3-96e3-0b1218eb45a7" name="Default Changelist" comment="" />
+    <list default="true" id="1ea462e1-d366-47e3-96e3-0b1218eb45a7" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/studiepad-applicatie.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,8 +51,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-85">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
+            <state relative-caret-position="-786">
+              <caret line="52" column="23" lean-forward="true" selection-start-line="52" selection-start-column="23" selection-end-line="52" selection-end-column="23" />
               <folding>
                 <element signature="e#49#63#0" expanded="true" />
               </folding>
@@ -189,7 +193,7 @@
       <workItem from="1560850528711" duration="1604000" />
       <workItem from="1560863479670" duration="703000" />
       <workItem from="1560866961535" duration="33000" />
-      <workItem from="1561037716494" duration="581000" />
+      <workItem from="1561037716494" duration="687000" />
     </task>
     <task id="LOCAL-00001" summary="Test update to merge">
       <created>1560852924549</created>
@@ -223,13 +227,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2971000" />
+    <option name="totallyTimeSpent" value="3077000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.52077746" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.52077746" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Database Console" weight="0.32956153" />
@@ -277,8 +281,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        <state relative-caret-position="-786">
+          <caret line="52" column="23" lean-forward="true" selection-start-line="52" selection-start-column="23" selection-end-line="52" selection-end-column="23" />
           <folding>
             <element signature="e#49#63#0" expanded="true" />
           </folding>
