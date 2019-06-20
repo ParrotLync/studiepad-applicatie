@@ -114,7 +114,6 @@ def user_credentials():
 
 
 def main():
-    # TODO: Mogelijkheid om de applicatie af te sluiten
     login_user = Login()
 
     while not login_user.logged_in:
