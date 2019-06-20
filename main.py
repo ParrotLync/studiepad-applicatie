@@ -25,7 +25,6 @@ class Login(SqliteDBConnection):
         self.logged_in = False
 
     def search_user(self, type_user, username, password):
-        self.logged_in = True
         return self.execute_query(self.find_user, username, password, type_user)
 
 
@@ -52,12 +51,12 @@ class SPA(SqliteDBConnection):
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
                   "1. niets 1"
                   "0. Sluit de applicatie af")
-            self.choice_app = [1, 0]
+            self.choice_app = [0]
         if self.user_type is 3:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
                   "1. niets 2"
                   "0. Sluit de applicatie af")
-            self.choice_app = [1, 0]
+            self.choice_app = [0]
 
     def app_choice(self):
         valid_menu_choice = False
@@ -83,10 +82,9 @@ class SPA(SqliteDBConnection):
         self.done_with_app = True
 
 
-def login(choice_user, username, password):
+def try_to_login(choice_user, username, password):
     login_user = Login()
     users = login_user.search_user(choice_user, username, password)
-    print(users)
     if len(users) > 0:
         print("\nWelkom {} {}.".format(users[0][2], users[0][3]))
         return users
@@ -114,17 +112,20 @@ def user_credentials():
 
 
 def main():
-    login_user = Login()
+    setup = Login()
 
-    while not login_user.logged_in:
+    while not setup.logged_in:
         credentials = user_credentials()
-        if credentials == 0:
-            login_user.logged_in = True
+        if credentials is 0:
+            setup.logged_in = True
         else:
-            check_if_logged_in = login(credentials[0], credentials[1], credentials[2])
-            use_apps = SPA(credentials[0], check_if_logged_in)
-            while not use_apps.done_with_app:
-                use_apps.app_choice()
+            login_user = try_to_login(credentials[0], credentials[1], credentials[2])
+            if login_user is None:
+                setup.logged_in = False
+            else:
+                use_apps = SPA(credentials[0], login_user)
+                while not use_apps.done_with_app:
+                    use_apps.app_choice()
 
 
 if __name__ == "__main__":
