@@ -33,8 +33,8 @@ class SPA(SqliteDBConnection):
     def __init__(self, type_user, user_id):
         self.spa_db_path = os.path.join(os.path.dirname(__file__), 'spa_data.db')
         super().__init__(self.spa_db_path)
-        self.choice_menu = {1: {0: self.close_program,
-                                1: self.test},
+        self.choice_menu = {1: {1: self.test,
+                                0: self.close_program},
                             2: {0: self.close_program},
                             3: {0: self.close_program}}
         self.choice_app = []
@@ -122,9 +122,7 @@ def main():
             login_user.logged_in = True
         else:
             check_if_logged_in = login(credentials[0], credentials[1], credentials[2])
-
             use_apps = SPA(credentials[0], check_if_logged_in)
-
             while not use_apps.done_with_app:
                 use_apps.app_choice()
 
