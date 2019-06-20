@@ -21,20 +21,19 @@ class Login(SqliteDBConnection):
     def __init__(self):
         self.login_db_path = os.path.join(os.path.dirname(__file__), 'login_db.db')
         super().__init__(self.login_db_path)
-        self.find_user = {1: "SELECT * FROM login_student WHERE username = ? AND password = ?",
-                          2: "SELECT * FROM login_slber WHERE username = ? AND password = ?",
-                          3: "SELECT * FROM login_management WHERE username = ? AND password = ?"}
+        self.find_user = "SELECT * FROM users WHERE username = ? AND password = ? AND type_user = ?"
         self.logged_in = False
 
-    def search_user(self, choice_user, username, password):
-        return self.execute_query(self.find_user[choice_user], username, password)
+    def search_user(self, type_user, username, password):
+        return self.execute_query(self.find_user, username, password, type_user)
 
 
 class SPA(SqliteDBConnection):
     def __init__(self, type_user, user_id):
         self.spa_db_path = os.path.join(os.path.dirname(__file__), 'spa_data.db')
         super().__init__(self.spa_db_path)
-        self.choice_menu = {1: {0: self.close_program},
+        self.choice_menu = {1: {0: self.close_program,
+                                1: self.test},
                             2: {0: self.close_program},
                             3: {0: self.close_program}}
         self.choice_app = []
@@ -47,17 +46,17 @@ class SPA(SqliteDBConnection):
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
                   "1. "
                   "0. Sluit de applicatie af")
-            self.choice_app = [0]
+            self.choice_app = [1, 0]
         if self.user_type is 2:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
                   "1. "
                   "0. Sluit de applicatie af")
-            self.choice_app = [0]
+            self.choice_app = [1, 0]
         if self.user_type is 3:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
                   "1. "
                   "0. Sluit de applicatie af")
-            self.choice_app = [0]
+            self.choice_app = [1, 0]
 
     def app_choice(self):
         valid_menu_choice = False
@@ -73,6 +72,9 @@ class SPA(SqliteDBConnection):
                     print("\n{} is geen geldige keuze, probeer het nog eens.".format(choice_app))
             except ValueError:
                 print("\nU heeft een ongeldig karakter ingevuld, probeer het nog eens.")
+
+    def test(self):
+        print("test")
 
     def close_program(self):
         print("\nWij wensen u een fijne dag!")
@@ -110,7 +112,7 @@ def user_credentials():
 
 def main():
     login_user = Login()
-
+    
     while not login_user.logged_in:
         credentials = user_credentials()
         check_if_logged_in = login(credentials[0], credentials[1], credentials[2])
