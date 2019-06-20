@@ -1,1 +1,2 @@
-.idea
+$ cat .gitignore
+/.idea
