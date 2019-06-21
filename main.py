@@ -1,7 +1,6 @@
 # Casusgroep 12 - Alain Lardinois & Peter Roijen
 import sqlite3
 import os
-import time
 
 
 class SqliteDBConnection:
@@ -33,10 +32,10 @@ class SPA(SqliteDBConnection):
         self.spa_db_path = os.path.join(os.path.dirname(__file__), 'spa_data.db')
         super().__init__(self.spa_db_path)
         self.choice_menu = {1: {1: self.print_available_courses,
-                                0: self.close_program},
-                            2: {0: self.close_program},
-                            3: {0: self.close_program}}
-        self.choice_app = []
+                                0: self.close_spa_program},
+                            2: {0: self.close_spa_program},
+                            3: {0: self.close_spa_program}}
+        self.choice_app_list = []
         self.user_type = type_user
         self.userID = user_id
         self.done_with_app = False
@@ -45,18 +44,18 @@ class SPA(SqliteDBConnection):
         if self.user_type is 1:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
                   "1. Mogelijke keuzevakken\n"
-                  "0. Sluit de applicatie af")
-            self.choice_app = [1, 0]
+                  "0. Uitloggen")
+            self.choice_app_list = [1, 0]
         if self.user_type is 2:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
                   "1. niets 1\n"
-                  "0. Sluit de applicatie af")
-            self.choice_app = [0]
+                  "0. Uitloggen")
+            self.choice_app_list = [0]
         if self.user_type is 3:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
                   "1. niets 2\n"
-                  "0. Sluit de applicatie af")
-            self.choice_app = [0]
+                  "0. Uitloggen")
+            self.choice_app_list = [0]
 
     def app_choice(self):
         valid_menu_choice = False
@@ -64,7 +63,7 @@ class SPA(SqliteDBConnection):
             try:
                 self.display_menu()
                 choice_app = int(input("\nWat is uw keuze?: "))
-                if choice_app in self.choice_app:
+                if choice_app in self.choice_app_list:
                     action = self.choice_menu[self.user_type].get(choice_app)
                     action()
                     valid_menu_choice = True
@@ -79,9 +78,8 @@ class SPA(SqliteDBConnection):
         print(self.cursor.description())
         print(self.execute_query(courses_query))
 
-    def close_program(self):
+    def close_spa_program(self):
         print("\nU wordt nu uitgelogd. Wij wensen u een fijne dag!")
-        time.sleep(2)
         self.done_with_app = True
 
 
