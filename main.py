@@ -34,7 +34,8 @@ class SPA(SqliteDBConnection):
         self.choice_menu = {1: {1: self.print_available_courses,
                                 0: self.close_spa_program},
                             2: {0: self.close_spa_program},
-                            3: {0: self.close_spa_program}}
+                            3: {0: self.close_spa_program},
+                            4: {0: self.close_spa_program}}
         self.choice_app_list = []
         self.user_type = type_user
         self.userID = user_id
@@ -52,6 +53,11 @@ class SPA(SqliteDBConnection):
                   "0. Uitloggen")
             self.choice_app_list = [0]
         if self.user_type is 3:
+            print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
+                  "1. niets 2\n"
+                  "0. Uitloggen")
+            self.choice_app_list = [0]
+        if self.user_type is 5:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
                   "1. niets 2\n"
                   "0. Uitloggen")
@@ -75,7 +81,7 @@ class SPA(SqliteDBConnection):
     def print_available_courses(self):
         # TODO: Werkt niet, aanpassen
         courses_query = "SELECT * FROM COURSES"
-        print(self.cursor.description())
+        print(self.cursor.description)
         print(self.execute_query(courses_query))
 
     def close_spa_program(self):
@@ -98,6 +104,7 @@ def user_credentials():
           "1. Inloggen student\n"
           "2. Inloggen SLBer\n"
           "3. Inloggen management\n"
+          "4. Inloggen exaemen commisie\n"
           "0. Applicatie afsluiten")
     while True:
         try:
