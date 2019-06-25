@@ -1,7 +1,6 @@
 # Casusgroep 12 - Alain Lardinois & Peter Roijen
 import sqlite3
 import os
-import time
 
 
 class SqliteDBConnection:
@@ -21,23 +20,23 @@ class Login(SqliteDBConnection):
     def __init__(self):
         self.login_db_path = os.path.join(os.path.dirname(__file__), 'login_db.db')
         super().__init__(self.login_db_path)
-        self.find_user = {1: "SELECT * FROM login_student WHERE username = ? AND password = ?",
-                          2: "SELECT * FROM login_slber WHERE username = ? AND password = ?",
-                          3: "SELECT * FROM login_management WHERE username = ? AND password = ?"}
+        self.find_user = "SELECT * FROM USERS WHERE username = ? AND password = ? AND type_user = ?"
         self.logged_in = False
 
-    def search_user(self, choice_user, username, password):
-        return self.execute_query(self.find_user[choice_user], username, password)
+    def search_user(self, type_user, username, password):
+        return self.execute_query(self.find_user, username, password, type_user)
 
 
 class SPA(SqliteDBConnection):
     def __init__(self, type_user, user_id):
         self.spa_db_path = os.path.join(os.path.dirname(__file__), 'spa_data.db')
         super().__init__(self.spa_db_path)
-        self.choice_menu = {1: {0: self.close_program},
-                            2: {0: self.close_program},
-                            3: {0: self.close_program}}
-        self.choice_app = []
+        self.choice_menu = {1: {1: self.print_available_courses,
+                                0: self.close_spa_program},
+                            2: {0: self.close_spa_program},
+                            3: {0: self.close_spa_program},
+                            4: {0: self.close_spa_program}}
+        self.choice_app_list = []
         self.user_type = type_user
         self.userID = user_id
         self.done_with_app = False
@@ -45,19 +44,24 @@ class SPA(SqliteDBConnection):
     def display_menu(self):
         if self.user_type is 1:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
-                  "1. "
-                  "0. Sluit de applicatie af")
-            self.choice_app = [0]
+                  "1. Mogelijke keuzevakken\n"
+                  "0. Uitloggen")
+            self.choice_app_list = [1, 0]
         if self.user_type is 2:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
-                  "1. "
-                  "0. Sluit de applicatie af")
-            self.choice_app = [0]
+                  "1. niets 1\n"
+                  "0. Uitloggen")
+            self.choice_app_list = [0]
         if self.user_type is 3:
             print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
-                  "1. "
-                  "0. Sluit de applicatie af")
-            self.choice_app = [0]
+                  "1. niets 2\n"
+                  "0. Uitloggen")
+            self.choice_app_list = [0]
+        if self.user_type is 5:
+            print("\nKies een van de onderstaande taken die u wilt uitvoeren.\n"
+                  "1. niets 2\n"
+                  "0. Uitloggen")
+            self.choice_app_list = [0]
 
     def app_choice(self):
         valid_menu_choice = False
@@ -65,7 +69,7 @@ class SPA(SqliteDBConnection):
             try:
                 self.display_menu()
                 choice_app = int(input("\nWat is uw keuze?: "))
-                if choice_app in self.choice_app:
+                if choice_app in self.choice_app_list:
                     action = self.choice_menu[self.user_type].get(choice_app)
                     action()
                     valid_menu_choice = True
@@ -74,57 +78,62 @@ class SPA(SqliteDBConnection):
             except ValueError:
                 print("\nU heeft een ongeldig karakter ingevuld, probeer het nog eens.")
 
-    def close_program(self):
-        print("\nWij wensen u een fijne dag!")
-        time.sleep(2)
+    def print_available_courses(self):
+        # TODO: Werkt niet, aanpassen
+        courses_query = "SELECT * FROM COURSES"
+        print(self.cursor.description)
+        print(self.execute_query(courses_query))
+
+    def close_spa_program(self):
+        print("\nU wordt nu uitgelogd. Wij wensen u een fijne dag!")
         self.done_with_app = True
 
 
-def login(choice_user, username, password):
+def try_to_login(choice_user, username, password):
     login_user = Login()
     users = login_user.search_user(choice_user, username, password)
     if len(users) > 0:
         print("\nWelkom {} {}.".format(users[0][2], users[0][3]))
-        return True, users
+        return users
     else:
         print("\nDe opgegeven credentials zijn niet bekend in het systeem, probeer het nog eens.")
-        return False
 
 
 def user_credentials():
-    print("\nKies een van de onderstaande gebruikers waar u op wilt inloggen.\n"
-          "1. Student\n"
-          "2. SLB'er\n"
-          "3. Management")
-    valid_input = False
-    while not valid_input:
+    print("\nKies een van de onderstaande opties.\n"
+          "1. Inloggen student\n"
+          "2. Inloggen SLBer\n"
+          "3. Inloggen management\n"
+          "4. Inloggen exaemen commisie\n"
+          "0. Applicatie afsluiten")
+    while True:
         try:
             choice_user = int(input("\nWat is uw keuze?: "))
-            username = input("\nWat is uw gebruikersnaam?: ")
-            password = input("Wat is uw wachtwoord?: ")
-            valid_input = True
-            return choice_user, username, password
+            if choice_user is 0:
+                return choice_user
+            else:
+                username = input("\nWat is uw gebruikersnaam?: ")
+                password = input("Wat is uw wachtwoord?: ")
+                return choice_user, username, password
         except ValueError:
             print("De keuze dat u heeft gemaakt is niet mogelijk, probeer het nog eens.")
 
 
 def main():
-    login_user = Login()
+    setup = Login()
 
-    while not login_user.logged_in:
+    while not setup.logged_in:
         credentials = user_credentials()
-        check_if_logged_in = login(credentials[0], credentials[1], credentials[2])
-        try:
-            is_logged_in = check_if_logged_in[0]
-        except TypeError:
-            is_logged_in = check_if_logged_in
-
-        login_user.logged_in = is_logged_in
-
-    use_apps = SPA(credentials[0], check_if_logged_in[1][0][0])
-
-    while not use_apps.done_with_app:
-        use_apps.app_choice()
+        if credentials is 0:
+            setup.logged_in = True
+        else:
+            login_user = try_to_login(credentials[0], credentials[1], credentials[2])
+            if login_user is None:
+                setup.logged_in = False
+            else:
+                use_apps = SPA(credentials[0], login_user)
+                while not use_apps.done_with_app:
+                    use_apps.app_choice()
 
 
 if __name__ == "__main__":
