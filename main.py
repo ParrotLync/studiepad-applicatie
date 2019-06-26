@@ -93,6 +93,7 @@ class SPA(SqliteDBConnection):
                         period = input("\nVoor welke periode wilt u het studiepad inzien?: ")
                         if period in ["1", "2", "3", "4"]:
                             available_courses = self.available_courses(student_id, period)
+                            print(available_courses)
                             choice_course = input("\nWelk vak wilt u toevoegen aan uw studiepad? (vul het vak ID in): ")
                             if choice_course in available_courses:
 
@@ -127,13 +128,12 @@ class SPA(SqliteDBConnection):
                                  "JOIN profiles P ON CP.profile_id = P.profile_id " \
                                  "JOIN student_profile_choice SPC ON P.profile_id = SPC.profile_id " \
                                  "JOIN students S ON SPC.student_id = S.student_id " \
-                                 "JOIN study_paths SP ON " \
-                                 "WHERE SPC.student_id = ? AND C.period = ? " \
-                                 "AND AND C.grade = S.grade AND CP.profile_id = SPC.profile_id"
+                                 "WHERE SPC.student_id = ? " \
+                                 "AND C.period = ? AND C.grade = S.grade AND CP.profile_id = SPC.profile_id"
         show_available_courses = self.execute_query(available_course_query, student_id, period)
         for row in show_available_courses:
             print("{:<10}".format(row[0]), "{:<10}".format(row[1]), "{:<10}".format(row[2]))
-        return show_available_courses[0]
+        return show_available_courses
 
     def insert_courses(self):
         pass
