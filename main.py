@@ -31,7 +31,7 @@ class SPA(SqliteDBConnection):
     def __init__(self, type_user):
         self.spa_db_path = os.path.join(os.path.dirname(__file__), 'spa_data.db')
         super().__init__(self.spa_db_path)
-        self.choice_menu = {1: {1: self.print_available_courses,
+        self.choice_menu = {1: {1: self.choose_courses,
                                 0: self.close_spa_program},
                             2: {0: self.close_spa_program},
                             3: {0: self.close_spa_program}}
@@ -71,8 +71,9 @@ class SPA(SqliteDBConnection):
             except ValueError:
                 print("\nU heeft een ongeldig karakter ingevuld, probeer het nog eens.")
 
-    def print_available_courses(self):
+    def choose_courses(self):
         # TODO: Werkt niet, aanpassen
+        choose_courses_query = "<query met gekozen courses>"
         courses_query = "SELECT * FROM COURSES"
         print(self.cursor.description)
         print(self.execute_query(courses_query))
