@@ -16,17 +16,6 @@ class SqliteDBConnection:
         self.cursor.execute(modify_value_query, arg)
 
 
-# class Login(SqliteDBConnection):
-#     def __init__(self):
-#         self.login_db_path = os.path.join(os.path.dirname(__file__), 'login_db.db')
-#         super().__init__(self.login_db_path)
-#         self.find_user = "SELECT * FROM USERS WHERE username = ? AND password = ? AND type_user = ?"
-#         self.logged_in = False
-#
-#     def search_user(self, type_user, username, password):
-#         return self.execute_query(self.find_user, username, password, type_user)
-
-
 class SPA(SqliteDBConnection):
     def __init__(self, type_user):
         self.spa_db_path = os.path.join(os.path.dirname(__file__), 'spa_data.db')
@@ -73,24 +62,85 @@ class SPA(SqliteDBConnection):
 
     def choose_courses(self):
         # TODO: Werkt niet, aanpassen
-        choose_courses_query = "<query met gekozen courses>"
-        courses_query = "SELECT * FROM COURSES"
-        print(self.cursor.description)
-        print(self.execute_query(courses_query))
+        done_with_choice_courses = False
+        while not done_with_choice_courses:
+            print("\nWie van onderstaande studenten bent u?\n"
+                  "1. Peter Roijen\n"
+                  "2. Alain Lardinois\n"
+                  "3. Pietje Driekhoek\n"
+                  "4. Marissa Shadow")
+            student_id = input("Wat is uw keuze?: ")
+            if student_id in ["1", "2", "3", "4"]:
+                print("\nKies een van onderstaande taken die u wilt uitvoeren.\n"
+                      "1. Huidig studieplan inzien\n"
+                      "2. Studieplan bijwerken\n"
+                      "0. Applicatie afsluiten")
+                choice_menu = input("\nWat is uw keuze?")
+                if choice_menu is "0":
+                    done_with_choice_courses = True
+                elif choice_menu is "1":
+                    done = False
+                    while not done:
+                        period = input("\nVoor welke periode wilt u het studiepad inzien?: ")
+                        if period in ["1", "2", "3", "4"]:
+                            self.current_student_courses(student_id, period)
+                            done = True
+                        else:
+                            print("\n{} is geen geldige periode, probeer het nog eens.".format(period))
+                elif choice_menu is "2":
+                    done_with_studypath_change = False
+                    while not done_with_studypath_change:
+                        period = input("\nVoor welke periode wilt u het studiepad inzien?: ")
+                        if period in ["1", "2", "3", "4"]:
+                            available_courses = self.available_courses(student_id, period)
+                            choice_course = input("\nWelk vak wilt u toevoegen aan uw studiepad? (vul het vak ID in): ")
+                            if choice_course in available_courses:
+
+                                done_with_studypath_change = True
+                            else:
+                                print("\n{} is geen geldige keuze, probeer het nog eens.".format(choice_course))
+                        else:
+                            print("\n{} is geen geldige periode, probeer het nog eens.".format(period))
+                else:
+                    print("\n{} is geen geldige keuze, probeer het nog eens.".format(choice_menu))
+            else:
+                print("\n{} is geen geldige keuze, probeer het nog eens.".format(student_id))
+
+    def current_student_courses(self, student_id, period):
+        amount_ec = []
+        student_courses_query = "SELECT SPC.course_id, C.course_name, C.amount_ec " \
+                                "FROM study_paths SP " \
+                                "JOIN study_path_courses SPC on SP.path_id = SPC.path_id " \
+                                "JOIN courses C on SPC.course_id = C.course_id " \
+                                "WHERE SP.student_id = ? AND SP.period = ?"
+        show_courses_student = self.execute_query(student_courses_query, student_id, period)
+        for row in show_courses_student:
+            print("{:<10}".format(row[0]), "{:<10}".format(row[1]))
+        for amount in show_courses_student:
+            amount_ec.append(amount[2])
+        print("\nHet aantal EC's van deze periode is {}".format(sum(amount_ec)))
+
+    def available_courses(self, student_id, period):
+        available_course_query = "SELECT C.course_id, C.course_name, C.amount_ec " \
+                                 "FROM courses C " \
+                                 "JOIN course_profile CP ON C.course_id = CP.course_id " \
+                                 "JOIN profiles P ON CP.profile_id = P.profile_id " \
+                                 "JOIN student_profile_choice SPC ON P.profile_id = SPC.profile_id " \
+                                 "JOIN students S ON SPC.student_id = S.student_id " \
+                                 "JOIN study_paths SP ON " \
+                                 "WHERE SPC.student_id = ? AND C.period = ? " \
+                                 "AND AND C.grade = S.grade AND CP.profile_id = SPC.profile_id"
+        show_available_courses = self.execute_query(available_course_query, student_id, period)
+        for row in show_available_courses:
+            print("{:<10}".format(row[0]), "{:<10}".format(row[1]), "{:<10}".format(row[2]))
+        return show_available_courses[0]
+
+    def insert_courses(self):
+        pass
 
     def close_spa_program(self):
         print("\nU wordt nu uitgelogd. Wij wensen u een fijne dag!")
         self.done_with_app = True
-
-
-# def try_to_login(choice_user, username, password):
-#     login_user = Login()
-#     users = login_user.search_user(choice_user, username, password)
-#     if len(users) > 0:
-#         print("\nWelkom {} {}.".format(users[0][2], users[0][3]))
-#         return users
-#     else:
-#         print("\nDe opgegeven credentials zijn niet bekend in het systeem, probeer het nog eens.")
 
 
 def user_credentials():
@@ -119,20 +169,6 @@ def main():
             use_apps = SPA(type_user)
             while not use_apps.done_with_app:
                 use_apps.app_choice()
-    # setup = Login()
-    #
-    # while not setup.logged_in:
-    #     credentials = user_credentials()
-    #     if credentials is 0:
-    #         setup.logged_in = True
-    #     else:
-    #         login_user = try_to_login(credentials[0], credentials[1], credentials[2])
-    #         if login_user is None:
-    #             setup.logged_in = False
-    #         else:
-    #             use_apps = SPA(credentials[0], login_user)
-    #             while not use_apps.done_with_app:
-    #                 use_apps.app_choice()
 
 
 if __name__ == "__main__":
