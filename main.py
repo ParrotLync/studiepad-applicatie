@@ -18,10 +18,11 @@ class SqliteDBConnection:
 
 
 class SPA:
-    def __init__(self, database, user_type):
+    def __init__(self, database, user):
+        self.user = user
         self.data = database
         self.done = False
-        self.user_type = user_type
+        self.user_type = user.type
         self.choices = {}
         self.options = {1: {1: self.get_courses,
                             0: self.quit},
@@ -45,10 +46,16 @@ class SPA:
         option()
 
     def get_courses(self):
-        query = "SELECT course_id, course_name FROM COURSES"
-        courses = self.data.execute_query(query)
-        for course in courses:
-            print('{:8}{:35}'.format(course[0], course[1]))
+        period = (self.user.student.get('Period'))
+        year = (self.user.student.get('Year'))
+        print("\nBekijk hieronder je beschikbare vakken voor elk blok.")
+        while period != 5:
+            query = "SELECT course_id, course_name FROM COURSES WHERE(period = ? OR period is NULL) AND year = ?"
+            courses = self.data.execute_query(query, period, year)
+            print("\n## Blok", period, "##")
+            for course in courses:
+                print('{:8}{:35}'.format(course[0], course[1]))
+            period += 1
 
     def quit(self):
         self.done = True
@@ -86,15 +93,16 @@ class Login:
             choices.update({n: student[0] + ' ' + student[1]})
             n += 1
         choice = choice_menu(choices)
-        self.get_student_info(self.type, choice)
+        self.get_student_info(choice)
 
-    def get_student_info(self, user_type, student_id):
+    def get_student_info(self, student_id):
         query = "SELECT * FROM STUDENTS WHERE student_id = ?"
         student = self.data.execute_query(query, student_id)
+        student = student[0]
         self.student = {'Name': student[1] + ' ' + student[2],
-                        'Year': student[3],
-                        'Period': student[4],
-                        'SLB': student[5]}
+                        'Year': int(student[3]),
+                        'Period': int(student[4]),
+                        'SLB': int(student[5])}
 
 
 def choice_menu(choices):
@@ -116,10 +124,10 @@ if __name__ == "__main__":
     data = SqliteDBConnection()
     done = False
     while not done:
-        user = Login(data)
-        if user.type is 0:
+        login = Login(data)
+        if login.type is 0:
             done = True
         else:
-            app = SPA(data, user.type)
+            app = SPA(data, login)
             while not app.done:
                 app.start_option()
