@@ -212,12 +212,15 @@ class Login:
     def choose_user(self):
         if self.type is 1:
             query = "SELECT surname, last_name FROM STUDENTS"
+            message("note", "\nMomenteel werken alleen Peter (1) en Alain (2)")
         elif self.type is 2:
             query = "SELECT surname, last_name from TEACHERS"
+            message("note", "\nMomenteel werkt alleen Ayk de Bie (1)")
         users = self.data.execute_query(query)
         choices = {}
         n = 1
-        message("header", "\nWat is je naam?")
+        message("header", "Wat is je naam?")
+
         for user in users:
             choices.update({n: user[0] + ' ' + user[1]})
             n += 1
