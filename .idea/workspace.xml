@@ -121,7 +121,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-10" />
     <option name="width" value="979" />
     <option name="height" value="1040" />
@@ -369,7 +369,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="DB class aangemaakt met onderstaande functies:&#10;- execute_query: voert query uit en returned de SELECT waardes&#10;- modify_table_values: voert een change query uit&#10;&#10;Login class gemaakt waar de user wordt opgezocht op basis van bepaalde dingen." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/studiepad_applicatie$main.coverage" NAME="main Coverage Results" MODIFIED="1562191609817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/studiepad_applicatie$main.coverage" NAME="main Coverage Results" MODIFIED="1562191755437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/studiepad_applicatie$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1561934871072" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
   </component>
   <component name="editorHistoryManager">
