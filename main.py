@@ -27,12 +27,11 @@ class SPA:
         self.student_info = None
         self.user_type = user.type
         self.choices = {}
-        self.options = {1: {1: self.student_see_sp,
+        self.options = {1: {1: self.see_sp,
                             2: self.student_change_sp,
                             0: self.quit},
-                        2: {1: self.slb_list_sp,
+                        2: {1: self.see_sp,
                             2: self.assess_sp,
-                            3: 'self.generate_report',
                             0: self.quit}}
 
     def get_choices(self):
@@ -43,7 +42,6 @@ class SPA:
         elif self.user_type is 2:
             self.choices = {1: "Bekijk de studiepaden van je studenten.",
                             2: "Studiepaden af- en goedkeuren.",
-                            3: "Genereer een rapport met de studiepaden van je studenten.",
                             0: "Uitloggen"}
 
     def start_option(self):
@@ -55,13 +53,16 @@ class SPA:
         option = self.options[self.user_type].get(choice)
         option()
 
-    def student_see_sp(self):
-        self.user.get_student_info(self.user.student.get('ID'))
+    def see_sp(self):
+        if self.user.type is 1:
+            self.user.get_student_info(self.user.student.get('ID'))
+        elif self.user.type is 2:
+            self.choose_student('Goedgekeurd')
         period = self.user.student.get('Period')
         year = self.user.student.get('Year') + 1
         profile = self.user.student.get('Profile')
         if year != 1 and profile is 1:
-            message("warning", "\n[!] Je hebt nog geen profiel gekozen! Kies eerst je studiepad en kom dan terug.")
+            message("warning", "\n[!] Er is nog geen profiel gekozen! Kies eerst je studiepad en kom dan terug.")
         else:
             while period != 5:
                 studiepunten = 0
@@ -102,7 +103,7 @@ class SPA:
             message("note", "\nEen ogenblik geduld alstublieft, je studiepad wordt ingestuurd...")
             time.sleep(2)
 
-    def check_path(self, student_id):
+    def check_path(self, student_id, print_to_user=True):
         # TODO: Add database connection to get status
         self.user.get_student_info(student_id)
         year = self.user.student.get('Year') + 1
@@ -123,16 +124,19 @@ class SPA:
             status = 3
 
         if status is 1:
-            message("error", "\n✘ Je studiepad is nog niet ingevuld")
-            message("error", "✘ Je studiepad is nog niet goedgekeurd")
+            if print_to_user is True:
+                message("error", "\n✘ Je studiepad is nog niet ingevuld")
+                message("error", "✘ Je studiepad is nog niet goedgekeurd")
             return False
         elif status is 2:
-            message("success", "\n✔ Je studiepad is ingevuld.")
-            message("error", "✘ Je studiepad is nog niet goedgekeurd")
+            if print_to_user is True:
+                message("success", "\n✔ Je studiepad is ingevuld.")
+                message("error", "✘ Je studiepad is nog niet goedgekeurd")
             return False
         elif status is 3:
-            message("success", "\n✔ Je studiepad is ingevuld.")
-            message("success", "✔ Je studiepad is goedgekeurd.")
+            if print_to_user is True:
+                message("success", "\n✔ Je studiepad is ingevuld.")
+                message("success", "✔ Je studiepad is goedgekeurd.")
             return True
 
     def slb_list_sp(self):
@@ -142,32 +146,47 @@ class SPA:
 
     def assess_sp(self):
         # TODO: Finish function
-        self.choose_student()
-        approved = None
-        choices = {1: 'Studiepad goedkeuren',
-                   2: 'Studiepad afkeuren'}
-        message("header", "\nKies aan actie.")
-        choice = choice_menu(choices)
-        if choice is 1:
-            approved = True
-        elif choice is 2:
-            approved = False
-        update_query = "UPDATE STUDY_PATHS SET path_approved_by_slber = ? WHERE student_id = ?"
-        self.data.modify_value(update_query, approved, self.user.student.get('ID'))
-        message("note", "\nEen ogenblik geduld alstublieft, het studiepad wordt bijgewerkt...")
-        time.sleep(2)
+        abort = self.choose_student('Geen beoordeling')
+        if abort != 'Abort':
+            approved = None
+            choices = {1: 'Studiepad goedkeuren',
+                       2: 'Studiepad afkeuren'}
+            msg = "\nKies aan actie. Student: " + self.user.student.get('Name')
+            message("header", msg)
+            choice = choice_menu(choices)
+            if choice is 1:
+                approved = True
+            elif choice is 2:
+                approved = False
+            update_query = "UPDATE STUDY_PATHS SET path_approved_by_slber = ? WHERE student_id = ?"
+            self.data.modify_value(update_query, approved, self.user.student.get('ID'))
+            message("note", "\nEen ogenblik geduld alstublieft, het studiepad wordt bijgewerkt...")
+            time.sleep(2)
 
-    def choose_student(self):
-        query = "SELECT surname, last_name FROM STUDENTS WHERE SLB_ID = ?"
+    def choose_student(self, status):
+        query = "SELECT surname, last_name, student_id FROM STUDENTS WHERE SLB_ID = ?"
         students = self.data.execute_query(query, self.user.slb.get('ID'))
         student_choices = {}
         n = 1
-        message("header", "\nKies een student.")
         for student in students:
-            student_choices.update({n: student[0] + ' ' + student[1]})
+            if status == 'Geen beoordeling':
+                check = self.check_path(int(student[2]), False)
+                if check is False:
+                    student_choices.update({n: student[0] + ' ' + student[1]})
+            elif status == 'Goedgekeurd':
+                check = self.check_path(int(student[2]), False)
+                if check is True:
+                    student_choices.update({n: student[0] + ' ' + student[1]})
+            elif status == 'Alles':
+                student_choices.update({n: student[0] + ' ' + student[1]})
             n += 1
-        student_id = choice_menu(student_choices)
-        self.student_info = self.user.get_student_info(student_id)
+        if student_choices == {}:
+            message("error", "\nAlle ingediende studiepaden zijn momenteel goedgekeurd.")
+            return 'Abort'
+        else:
+            message("header", "\nKies een student.")
+            student_id = choice_menu(student_choices)
+            self.student_info = self.user.get_student_info(student_id)
 
     def quit(self):
         self.done = True
