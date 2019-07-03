@@ -104,7 +104,6 @@ class SPA:
             time.sleep(2)
 
     def check_path(self, student_id, print_to_user=True):
-        # TODO: Add database connection to get status
         self.user.get_student_info(student_id)
         year = self.user.student.get('Year') + 1
         profile = self.user.student.get('Profile')
@@ -139,13 +138,7 @@ class SPA:
                 message("success", "✔ Je studiepad is goedgekeurd.")
             return True
 
-    def slb_list_sp(self):
-        # TODO: Finish function
-        students = self.user.slb.get('Students')
-        print(students)
-
     def assess_sp(self):
-        # TODO: Finish function
         abort = self.choose_student('Geen beoordeling')
         if abort != 'Abort':
             approved = None
