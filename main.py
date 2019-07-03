@@ -33,11 +33,6 @@ class SPA:
                         2: {1: self.slb_list_sp,
                             2: self.assess_sp,
                             3: 'self.generate_report',
-                            0: self.quit},
-                        3: {1: 'self.list_sp',
-                            2: 'self.assess_sp',
-                            3: 'self.change_sp',
-                            4: 'self.generate_report',
                             0: self.quit}}
 
     def get_choices(self):
@@ -49,12 +44,6 @@ class SPA:
             self.choices = {1: "Bekijk de studiepaden van je studenten.",
                             2: "Studiepaden af- en goedkeuren.",
                             3: "Genereer een rapport met de studiepaden van je studenten.",
-                            0: "Uitloggen"}
-        elif self.user_type is 3:
-            self.choices = {1: "Bekijk alle studiepaden per student",
-                            2: "Studiepaden af- en goedkeuren.",
-                            3: "Studiepaden aanpassen.",
-                            4: "Genereer een rapport met alle studiepaden.",
                             0: "Uitloggen"}
 
     def start_option(self):
@@ -88,7 +77,6 @@ class SPA:
 
     def student_change_sp(self):
         year = self.user.student.get('Year') + 1
-        # TODO: Check if path is filled in
         if year is 2:
             choices = {1: "IT Services",
                        2: "IT Development",
@@ -102,7 +90,7 @@ class SPA:
             print("\nMoet je nog vakken opnieuw volgen? Vul dan de vakcode in (bijv. B1A03)")
             print("Indien dit niet nodig is, vul dan 'n' in.")
             while not herkansingen_done:
-                # TODO: Add check if course exists in previous year. Store with database connection
+                # Herkansingen worden nog niet meegenomen in het studieplan
                 try:
                     herkansing = (input(">> "))
                     if herkansing == 'n':
@@ -197,7 +185,6 @@ class Login:
     def choose_type(self):
         choices = {1: "Student",
                    2: "SLB'er",
-                   3: "Examencommissie",
                    0: "Programma afsluiten"}
         message("header", "\nKies een van de onderstaande opties.")
         choice = choice_menu(choices)
