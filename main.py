@@ -210,6 +210,7 @@ class Login:
             self.type = choice
 
     def choose_user(self):
+        query = None
         if self.type is 1:
             query = "SELECT surname, last_name FROM STUDENTS"
             message("note", "\nMomenteel werken alleen Peter (1) en Alain (2)")

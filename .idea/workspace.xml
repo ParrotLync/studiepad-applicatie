@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1ea462e1-d366-47e3-96e3-0b1218eb45a7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/alain.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/alain.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spa_data.db" beforeDir="false" afterPath="$PROJECT_DIR$/spa_data.db" afterDir="false" />
-    </list>
+    <list default="true" id="1ea462e1-d366-47e3-96e3-0b1218eb45a7" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +58,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
+            <state relative-caret-position="-559">
               <caret line="221" column="27" selection-start-line="221" selection-start-column="27" selection-end-line="221" selection-end-column="27" />
               <folding>
                 <element signature="e#49#63#0" expanded="true" />
@@ -121,9 +117,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
-    <option name="width" value="979" />
+    <option name="width" value="980" />
     <option name="height" value="1040" />
   </component>
   <component name="ProjectView">
@@ -263,7 +259,7 @@
       <workItem from="1561980084466" duration="6716000" />
       <workItem from="1562060738173" duration="5562000" />
       <workItem from="1562146778553" duration="13765000" />
-      <workItem from="1562191476356" duration="236000" />
+      <workItem from="1562191476356" duration="797000" />
     </task>
     <task id="LOCAL-00001" summary="Test update to merge">
       <created>1560852924549</created>
@@ -297,7 +293,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51204000" />
+    <option name="totallyTimeSpent" value="51761000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -316,7 +312,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49932975" visible="true" weight="0.36775106" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49932975" weight="0.36775106" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39886847" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -369,7 +365,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="DB class aangemaakt met onderstaande functies:&#10;- execute_query: voert query uit en returned de SELECT waardes&#10;- modify_table_values: voert een change query uit&#10;&#10;Login class gemaakt waar de user wordt opgezocht op basis van bepaalde dingen." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/studiepad_applicatie$main.coverage" NAME="main Coverage Results" MODIFIED="1562191755437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/studiepad_applicatie$main.coverage" NAME="main Coverage Results" MODIFIED="1562191891527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/studiepad_applicatie$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1561934871072" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
   </component>
   <component name="editorHistoryManager">
@@ -415,7 +411,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
+        <state relative-caret-position="-559">
           <caret line="221" column="27" selection-start-line="221" selection-start-column="27" selection-end-line="221" selection-end-column="27" />
           <folding>
             <element signature="e#49#63#0" expanded="true" />
